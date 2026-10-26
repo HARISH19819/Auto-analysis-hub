@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auto-analysis-hub | Autonomous Visual Data Diagnostic & Storytelling Agent</title>
+  <meta name="description" content="Autonomous Visual Data Diagnostic & Storytelling Agent Skill powered by Gemma 4 and Google GenAI Multimodal Vision. 100% Dynamic data intelligence.">
+
+  <!-- Google Fonts: Outfit & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+            },
+            deep: {
+              900: '#070a13',
+              800: '#0c1222',
+              700: '#111827',
+              card: 'rgba(17, 24, 39, 0.7)',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Marked.js for markdown rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <style>
+    body {
+      background-color: #070a13;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.08) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(129, 140, 248, 0.08) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.05) 0px, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    .glass-card {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(51, 65, 85, 0.65);
+    }
+
+    .glass-card-hover {
+      transition: all 0.2s ease-in-out;
+    }
+    .glass-card-hover:hover {
+      border-color: rgba(56, 189, 248, 0.5);
+      box-shadow: 0 10px 30px -10px rgba(56, 189, 248, 0.25);
+    }
+
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b0f19;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+
+    /* Markdown Styling Inside Reports */
+    .prose-dark h1, .prose-dark h2, .prose-dark h3 {
+      color: #f8fafc;
+      font-weight: 700;
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    .prose-dark p {
+      color: #cbd5e1;
+      line-height: 1.7;
+      margin-bottom: 0.85rem;
+    }
+    .prose-dark ul {
+      list-style-type: disc;
+      padding-left: 1.25rem;
+      color: #cbd5e1;
+      margin-bottom: 0.75rem;
+    }
+    .prose-dark li {
+      margin-bottom: 0.45rem;
+      line-height: 1.6;
+    }
+    .prose-dark strong {
+      color: #38bdf8;
+      font-weight: 600;
+    }
+    .prose-dark code {
+      background: #1e293b;
+      color: #38bdf8;
+      padding: 0.15rem 0.35rem;
+      border-radius: 0.25rem;
+      font-size: 0.875rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+  </style>
+</head>
+
+<body class="text-slate-100 font-sans min-h-screen flex flex-col selection:bg-cyan-500/30 selection:text-cyan-200">
+
+  <!-- ========================================================================= -->
+  <!-- 1. TOP NAVIGATION BAR                                                     -->
+  <!-- ========================================================================= -->
+  <header class="sticky top-0 z-40 border-b border-slate-800/80 bg-slate-950/85 backdrop-blur-xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Logo & Branding -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-indigo-500 to-cyan-400 p-0.5 shadow-lg shadow-cyan-500/20">
+          <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+            <svg class="w-5 h-5 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+          </div>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-display font-bold text-xl tracking-tight bg-gradient-to-r from-white via-slate-100 to-cyan-300 bg-clip-text text-transparent">Auto-analysis-hub</span>
+            <span class="px-2 py-0.5 text-[10px] font-semibold tracking-wide uppercase rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">100% Dynamic Engine</span>
+          </div>
+          <p class="text-xs text-slate-400 hidden sm:block">Autonomous Visual Data Diagnostic & Multimodal Storytelling Agent</p>
+        </div>
+      </div>
+
+      <!-- Model Status Badge -->
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-indigo-950/40 border border-indigo-500/30 text-indigo-300 text-xs font-medium shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>Vision Engine: <strong class="text-white">Gemma 4 Multimodal</strong></span>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- 2. MAIN APPLICATION WORKSPACE                                             -->
+  <!-- ========================================================================= -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- ===================================================================== -->
+      <!-- LEFT CONTROL SIDEBAR (4 Columns)                                      -->
+      <!-- ===================================================================== -->
+      <aside class="lg:col-span-4 space-y-5">
+        
+        <!-- Upload & Analysis Config Card -->
+        <div class="glass-card rounded-2xl p-5 shadow-xl relative overflow-hidden">
+          
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="font-display font-semibold text-base text-white flex items-center gap-2">
+              <svg class="w-4 h-4 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+              </svg>
+              Upload Dataset
+            </h2>
+            <span class="text-[11px] font-mono text-cyan-400 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-800/60">Dynamic CSV</span>
+          </div>
+
+          <!-- Drag and Drop CSV Zone -->
+          <div id="dropZone" class="border-2 border-dashed border-slate-700 hover:border-cyan-400 bg-slate-900/60 hover:bg-slate-900/90 transition duration-200 rounded-xl p-6 text-center cursor-pointer group relative">
+            <input type="file" id="csvFileInput" accept=".csv" class="hidden" onchange="handleFileSelect(event)">
+            
+            <div id="uploadPrompt" class="space-y-3">
+              <div class="w-14 h-14 mx-auto rounded-2xl bg-slate-800/80 group-hover:bg-cyan-500/20 text-slate-400 group-hover:text-cyan-400 flex items-center justify-center transition">
+                <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                </svg>
+              </div>
+              <div>
+                <p class="text-sm font-semibold text-slate-200 group-hover:text-cyan-300">
+                  Drop your CSV file here, or <span class="text-cyan-400 underline">browse</span>
+                </p>
+                <p class="text-xs text-slate-400 mt-1">Upload any spreadsheet dataset to begin</p>
+              </div>
+            </div>
+
+            <!-- Uploaded File Badge -->
+            <div id="uploadedFileDetails" class="hidden text-left bg-slate-800/90 p-3.5 rounded-xl border border-slate-700">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2.5 overflow-hidden">
+                  <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  <span id="fileNameLabel" class="text-xs font-mono font-medium text-white truncate">dataset.csv</span>
+                </div>
+                <button type="button" onclick="clearSelectedFile(event)" class="text-slate-400 hover:text-rose-400 text-sm font-bold ml-2 p-1">✕</button>
+              </div>
+              <p id="fileMetaLabel" class="text-[11px] text-slate-400 mt-1.5 font-mono">Ready for multimodal analysis</p>
+            </div>
+          </div>
+
+          <!-- Analysis Persona Selector (Clear Distinction) -->
+          <div class="mt-5 pt-4 border-t border-slate-800/80">
+            <div class="flex items-center justify-between mb-2">
+              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider">Analysis Persona Mode:</label>
+              <span class="text-[10px] text-cyan-400 font-mono">Tailored Insights</span>
+            </div>
+
+            <div class="grid grid-cols-1 gap-2.5">
+              <!-- Executive Mode Radio -->
+              <label class="cursor-pointer">
+                <input type="radio" name="persona" value="executive" checked class="peer sr-only" onchange="onPersonaChanged()">
+                <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800 peer-checked:border-cyan-500 peer-checked:bg-cyan-950/30 transition">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                      <span class="text-lg">👔</span>
+                      <span class="text-xs font-bold text-slate-200 peer-checked:text-cyan-300">Executive Leadership Mode</span>
+                    </div>
+                    <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-cyan-950/80 text-cyan-400 border border-cyan-800/50">C-Suite ROI</span>
+                  </div>
+                  <p class="text-[11px] text-slate-400 mt-1 pl-7 leading-relaxed">
+                    Bottom-line impact, revenue trajectory, macro volatility risks, and decisive strategic playbooks.
+                  </p>
+                </div>
+              </label>
+
+              <!-- Student / Researcher Mode Radio -->
+              <label class="cursor-pointer">
+                <input type="radio" name="persona" value="student" class="peer sr-only" onchange="onPersonaChanged()">
+                <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800 peer-checked:border-indigo-500 peer-checked:bg-indigo-950/30 transition">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                      <span class="text-lg">🎓</span>
+                      <span class="text-xs font-bold text-slate-200 peer-checked:text-indigo-300">Student & Researcher Mode</span>
+                    </div>
+                    <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-indigo-950/80 text-indigo-400 border border-indigo-800/50">Data Science</span>
+                  </div>
+                  <p class="text-[11px] text-slate-400 mt-1 pl-7 leading-relaxed">
+                    Mathematical distribution proofs, Tukey 1.5× IQR fences, skewness/kurtosis, and feature engineering.
+                  </p>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Optional Custom Focus Prompt -->
+          <div class="mt-4">
+            <label for="customPromptInput" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+              Custom Diagnostic Focus <span class="text-slate-400 font-normal lowercase">(optional)</span>:
+            </label>
+            <textarea id="customPromptInput" rows="2" placeholder="e.g. Focus on unexpected drops or outlier correlations..." class="w-full text-xs bg-slate-900/90 border border-slate-800 rounded-xl p-2.5 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500/80 transition resize-none"></textarea>
+          </div>
+
+          <!-- Prominent Run Button -->
+          <div class="mt-5">
+            <button id="runAnalysisBtn" onclick="runAnalysis()" class="w-full py-3.5 px-4 rounded-xl font-display font-semibold text-sm text-white bg-gradient-to-r from-cyan-500 via-indigo-600 to-cyan-500 hover:from-cyan-400 hover:to-indigo-500 transition duration-300 shadow-lg shadow-cyan-500/25 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+              <span id="runBtnIcon">🚀</span>
+              <span id="runBtnText">RUN DYNAMIC GEMMA 4 ANALYSIS</span>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Workflow Summary Card -->
+        <div class="glass-card rounded-2xl p-4 text-xs text-slate-400 space-y-2 border-slate-800/60">
+          <div class="flex items-center justify-between text-slate-300 font-medium">
+            <span>Dynamic Diagnostic Pipeline</span>
+            <span class="text-emerald-400 flex items-center gap-1 text-[11px]">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              Real-time
+            </span>
+          </div>
+          <p class="text-[11px] leading-relaxed">
+            CSV Upload ➔ Profiler Health Matrix ➔ Matplotlib 4-Panel Engine ➔ Gemma 4 Multimodal Vision ➔ Dynamic Storytelling & Auto-Cleaning.
+          </p>
+        </div>
+
+      </aside>
+
+      <!-- ===================================================================== -->
+      <!-- RIGHT MAIN WORKSPACE (8 Columns)                                      -->
+      <!-- ===================================================================== -->
+      <section class="lg:col-span-8 space-y-6">
+
+        <!-- 2 Clean Focused Navigation Tabs Bar -->
+        <div class="glass-card rounded-2xl p-1.5 flex gap-2 border-slate-800">
+          <button id="tab-btn-visual" onclick="switchTab('visual')" class="tab-btn flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-500/20 to-indigo-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm">
+            <span>📊</span>
+            <span>Visual Diagnostic Studio</span>
+          </button>
+          <button id="tab-btn-clean" onclick="switchTab('clean')" class="tab-btn flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center justify-center gap-2 text-slate-400 hover:text-slate-200">
+            <span>🧹</span>
+            <span>Auto Clean Studio</span>
+          </button>
+        </div>
+
+        <!-- =================================================================== -->
+        <!-- TAB 1: VISUAL DIAGNOSTIC STUDIO                                     -->
+        <!-- =================================================================== -->
+        <div id="tab-content-visual" class="space-y-6">
+          
+          <!-- Top KPI Metrics Strip -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            
+            <!-- KPI 1: Health Score -->
+            <div class="glass-card rounded-2xl p-4 relative overflow-hidden">
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-slate-400 font-medium">Health Score</span>
+                <span id="kpiHealthRatingBadge" class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-800 text-slate-400">Ready</span>
+              </div>
+              <div class="mt-2 flex items-baseline gap-2">
+                <span id="kpiHealthScore" class="font-display font-bold text-3xl text-white">--%</span>
+              </div>
+              <div class="w-full bg-slate-800 h-1.5 rounded-full mt-3 overflow-hidden">
+                <div id="kpiHealthBar" class="bg-gradient-to-r from-cyan-400 to-emerald-400 h-full w-0 transition-all duration-700"></div>
+              </div>
+            </div>
+
+            <!-- KPI 2: Total Rows & Dimensions -->
+            <div class="glass-card rounded-2xl p-4">
+              <span class="text-xs text-slate-400 font-medium">Total Dimensions</span>
+              <div class="mt-2 flex items-baseline gap-1.5">
+                <span id="kpiRows" class="font-display font-bold text-2xl text-white">0</span>
+                <span class="text-xs text-slate-400">rows</span>
+              </div>
+              <p id="kpiCols" class="text-xs text-slate-400 mt-2 font-mono">0 columns</p>
+            </div>
+
+            <!-- KPI 3: Missing Cells -->
+            <div class="glass-card rounded-2xl p-4">
+              <span class="text-xs text-slate-400 font-medium">Data Hygiene</span>
+              <div class="mt-2 flex items-baseline gap-1.5">
+                <span id="kpiMissingCells" class="font-display font-bold text-2xl text-cyan-400">0</span>
+                <span class="text-xs text-slate-400">nulls</span>
+              </div>
+              <p id="kpiDuplicates" class="text-xs text-slate-400 mt-2">0 duplicates</p>
+            </div>
+
+            <!-- KPI 4: Visual Anomalies Detected -->
+            <div class="glass-card rounded-2xl p-4">
+              <span class="text-xs text-slate-400 font-medium">Visual Anomalies</span>
+              <div class="mt-2 flex items-baseline gap-1.5">
+                <span id="kpiOutliers" class="font-display font-bold text-2xl text-rose-400">0</span>
+                <span class="text-xs text-slate-400">spotted</span>
+              </div>
+              <p class="text-xs text-slate-400 mt-2">1.5× IQR Boundary</p>
+            </div>
+
+          </div>
+
+          <!-- 2x2 Interactive Chart Gallery -->
+          <div class="glass-card rounded-2xl p-5 shadow-2xl">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h3 class="font-display font-semibold text-lg text-white">Multimodal 4-Panel Diagnostic Vision</h3>
+                <p class="text-xs text-slate-400">High-contrast dark-mode charts inspected by Gemma 4 Multimodal Intelligence</p>
+              </div>
+              <span class="text-xs text-slate-400 font-mono hidden sm:inline">Click any chart to zoom 🔍</span>
+            </div>
+
+            <!-- Empty State Placeholder -->
+            <div id="chartsEmptyState" class="py-16 text-center border border-dashed border-slate-800 rounded-xl space-y-3">
+              <div class="w-16 h-16 mx-auto rounded-2xl bg-slate-900 flex items-center justify-center text-slate-400">
+                <svg class="w-8 h-8 text-cyan-400/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <p class="text-sm font-medium text-slate-300">No Dataset Analyzed Yet</p>
+              <p class="text-xs text-slate-400 max-w-sm mx-auto">Upload a CSV file using the sidebar and click Run Analysis to generate dynamic visual charts.</p>
+            </div>
+
+            <!-- Active 2x2 Grid -->
+            <div id="chartsGrid" class="hidden grid grid-cols-1 md:grid-cols-2 gap-4">
+              
+              <!-- Chart 1 Card -->
+              <div class="glass-card glass-card-hover rounded-xl p-3 border-slate-800 group relative">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-xs font-semibold text-cyan-300 flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+                    Chart 1: Progression & Trend
+                  </span>
+                  <div class="flex items-center gap-1">
+                    <button onclick="zoomChart('chart1')" class="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-white text-xs" title="Zoom">🔍</button>
+                    <button onclick="downloadChart('chart1', 'chart_1_trend.png')" class="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-white text-xs" title="Download">⬇️</button>
+                  </div>
+                </div>
+                <div class="overflow-hidden rounded-lg bg-slate-950/60 cursor-pointer" onclick="zoomChart('chart1')">
+                  <img id="chart1Img" src="" alt="Chart 1 Trend" class="w-full h-auto object-contain transform group-hover:scale-[1.02] transition duration-300">
+                </div>
+                <p id="chart1Desc" class="text-[11px] text-slate-400 mt-2 truncate"></p>
+              </div>
+
+              <!-- Chart 2 Card -->
+              <div class="glass-card glass-card-hover rounded-xl p-3 border-slate-800 group relative">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-xs font-semibold text-indigo-300 flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-indigo-400"></span>
+                    Chart 2: Category Breakdown
+                  </span>
+                  <div class="flex items-center gap-1">
+                    <button onclick="zoomChart('chart2')" class="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-white text-xs" title="Zoom">🔍</button>
+                    <button onclick="downloadChart('chart2', 'chart_2_category.png')" class="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-white text-xs" title="Download">⬇️</button>
+                  </div>
+                </div>
+                <div class="overflow-hidden rounded-lg bg-slate-950/60 cursor-pointer" onclick="zoomChart('chart2')">
+                  <img id="chart2Img" src="" alt="Chart 2 Category" class="w-full h-auto object-contain transform group-hover:scale-[1.02] transition duration-300">
+                </div>
+                <p id="chart2Desc" class="text-[11px] text-slate-400 mt-2 truncate"></p>
+              </div>
+
+              <!-- Chart 3 Card -->
+              <div class="glass-card glass-card-hover rounded-xl p-3 border-slate-800 group relative">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-xs font-semibold text-emerald-300 flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                    Chart 3: Correlation Matrix
+                  </span>
+                  <div class="flex items-center gap-1">
+                    <button onclick="zoomChart('chart3')" class="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-white text-xs" title="Zoom">🔍</button>
+                    <button onclick="downloadChart('chart3', 'chart_3_correlation.png')" class="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-white text-xs" title="Download">⬇️</button>
+                  </div>
+                </div>
+                <div class="overflow-hidden rounded-lg bg-slate-950/60 cursor-pointer" onclick="zoomChart('chart3')">
+                  <img id="chart3Img" src="" alt="Chart 3 Correlation" class="w-full h-auto object-contain transform group-hover:scale-[1.02] transition duration-300">
+                </div>
+                <p id="chart3Desc" class="text-[11px] text-slate-400 mt-2 truncate"></p>
+              </div>
+
+              <!-- Chart 4 Card -->
+              <div class="glass-card glass-card-hover rounded-xl p-3 border-slate-800 group relative">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-xs font-semibold text-rose-300 flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-rose-400"></span>
+                    Chart 4: Anomaly Radar & Outliers
+                  </span>
+                  <div class="flex items-center gap-1">
+                    <button onclick="zoomChart('chart4')" class="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-white text-xs" title="Zoom">🔍</button>
+                    <button onclick="downloadChart('chart4', 'chart_4_outliers.png')" class="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-white text-xs" title="Download">⬇️</button>
+                  </div>
+                </div>
+                <div class="overflow-hidden rounded-lg bg-slate-950/60 cursor-pointer" onclick="zoomChart('chart4')">
+                  <img id="chart4Img" src="" alt="Chart 4 Outliers" class="w-full h-auto object-contain transform group-hover:scale-[1.02] transition duration-300">
+                </div>
+                <p id="chart4Desc" class="text-[11px] text-slate-400 mt-2 truncate"></p>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- Gemma 4 Multimodal Intelligence Report Cards -->
+          <div id="aiReportContainer" class="hidden space-y-4">
+            
+            <!-- Persona Banner -->
+            <div id="personaBannerContainer" class="p-4 rounded-2xl bg-gradient-to-r from-cyan-950/60 via-indigo-950/60 to-slate-900 border border-cyan-500/30 flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <span id="personaBannerIcon" class="text-2xl">👔</span>
+                <div>
+                  <h4 id="personaBannerTitle" class="font-display font-bold text-sm text-cyan-300">Executive Leadership Briefing</h4>
+                  <p id="personaBannerDesc" class="text-xs text-slate-300">Strategic ROI, operational risk exposure, and macro trajectory analysis</p>
+                </div>
+              </div>
+              <span id="aiModelUsedBadge" class="text-xs font-mono px-2.5 py-1 rounded-lg bg-indigo-950/80 text-indigo-300 border border-indigo-700/60">Gemma 4 Multimodal</span>
+            </div>
+
+            <!-- Report Card 1: Executive / Student Visual Narrative -->
+            <div class="glass-card rounded-2xl p-5 border-l-4 border-l-cyan-400 shadow-xl">
+              <h4 id="storySectionHeading" class="font-display font-semibold text-sm text-cyan-300 flex items-center gap-2 mb-3">
+                <span>📖</span> Comprehensive Visual Narrative
+              </h4>
+              <div id="executiveStoryContent" class="prose-dark text-sm leading-relaxed text-slate-200"></div>
+            </div>
+
+            <!-- Report Card 2 & 3: Anomaly Radar & Cross-Chart Correlations -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              
+              <!-- Anomaly Radar -->
+              <div class="glass-card rounded-2xl p-5 border-l-4 border-l-rose-400 shadow-xl">
+                <h4 class="font-display font-semibold text-sm text-rose-300 flex items-center gap-2 mb-3">
+                  <span>🎯</span> Visual Anomaly Radar
+                </h4>
+                <div id="visualAnomalyContent" class="prose-dark text-xs leading-relaxed text-slate-200"></div>
+              </div>
+
+              <!-- Cross-Chart Correlations -->
+              <div class="glass-card rounded-2xl p-5 border-l-4 border-l-indigo-400 shadow-xl">
+                <h4 class="font-display font-semibold text-sm text-indigo-300 flex items-center gap-2 mb-3">
+                  <span>🔗</span> Cross-Chart Correlations
+                </h4>
+                <div id="crossChartContent" class="prose-dark text-xs leading-relaxed text-slate-200"></div>
+              </div>
+
+            </div>
+
+            <!-- Report Card 4: Actionable Decision Playbook -->
+            <div class="glass-card rounded-2xl p-5 border-l-4 border-l-emerald-400 shadow-xl">
+              <h4 class="font-display font-semibold text-sm text-emerald-300 flex items-center gap-2 mb-3">
+                <span>📋</span> Actionable Decision Playbook
+              </h4>
+              <div id="playbookContent" class="space-y-2.5"></div>
+            </div>
+
+          </div>
+
+          <!-- Sticky "Ask the Charts" Interactive Chat Box -->
+          <div id="chatStudioContainer" class="hidden glass-card rounded-2xl p-5 border-slate-800 shadow-2xl">
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-cyan-400 animate-pulse"></span>
+                <h4 class="font-display font-semibold text-sm text-white">Ask the Charts (Interactive Q&A)</h4>
+              </div>
+              <span class="text-[11px] text-slate-400 font-mono">Grounded Fast Response</span>
+            </div>
+
+            <!-- Suggested Question Pills -->
+            <div class="flex flex-wrap gap-1.5 mb-3">
+              <button onclick="askPresetQuestion('Explain the outlier points in Chart 4')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-800/80 hover:bg-cyan-950/60 text-slate-300 hover:text-cyan-300 border border-slate-700 hover:border-cyan-500/50 transition">
+                Outliers in Chart 4?
+              </button>
+              <button onclick="askPresetQuestion('What caused the inflection drop in Chart 1?')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-800/80 hover:bg-cyan-950/60 text-slate-300 hover:text-cyan-300 border border-slate-700 hover:border-cyan-500/50 transition">
+                Inflection in Chart 1?
+              </button>
+              <button onclick="askPresetQuestion('Which features have strong correlation in Chart 3?')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-800/80 hover:bg-cyan-950/60 text-slate-300 hover:text-cyan-300 border border-slate-700 hover:border-cyan-500/50 transition">
+                Correlations in Chart 3?
+              </button>
+            </div>
+
+            <!-- Messages Log -->
+            <div id="chatMessages" class="max-h-64 overflow-y-auto space-y-3 mb-3 p-3 bg-slate-950/70 rounded-xl border border-slate-800/80 text-xs">
+              <div class="text-slate-400 text-center py-2">Ask any question about the generated charts and dataset.</div>
+            </div>
+
+            <!-- Chat Input Box -->
+            <div class="flex gap-2">
+              <input type="text" id="chatQuestionInput" onkeydown="if(event.key==='Enter') sendChatMessage()" placeholder="Ask a question about the charts..." class="flex-1 text-xs bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500">
+              <button onclick="sendChatMessage()" id="sendChatBtn" class="px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold text-xs rounded-xl transition flex items-center gap-1 shadow-md shadow-cyan-500/20">
+                <span>Ask</span>
+                <span>💬</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- =================================================================== -->
+        <!-- TAB 2: AUTO CLEAN STUDIO                                            -->
+        <!-- =================================================================== -->
+        <div id="tab-content-clean" class="hidden space-y-6">
+          
+          <!-- Before / After Comparison Cards -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            
+            <div class="glass-card rounded-2xl p-4">
+              <span class="text-xs text-slate-400 font-medium">Health Score Delta</span>
+              <div class="mt-2 flex items-baseline gap-2">
+                <span id="cleanHealthBefore" class="text-lg text-slate-400 font-mono">--%</span>
+                <span class="text-cyan-400 font-bold">➔</span>
+                <span id="cleanHealthAfter" class="font-display font-bold text-2xl text-emerald-400 font-mono">100%</span>
+              </div>
+              <p id="cleanImprovementBadge" class="text-xs text-emerald-400 mt-2 font-medium">Cleaned & Restored</p>
+            </div>
+
+            <div class="glass-card rounded-2xl p-4">
+              <span class="text-xs text-slate-400 font-medium">Missing Values Imputed</span>
+              <div class="mt-2 flex items-baseline gap-1.5">
+                <span id="cleanMissingFilled" class="font-display font-bold text-2xl text-cyan-400">0</span>
+                <span class="text-xs text-slate-400">cells</span>
+              </div>
+              <p class="text-xs text-slate-400 mt-2">Skewness-adaptive median/mean</p>
+            </div>
+
+            <div class="glass-card rounded-2xl p-4">
+              <span class="text-xs text-slate-400 font-medium">Outliers Winsorized</span>
+              <div class="mt-2 flex items-baseline gap-1.5">
+                <span id="cleanOutliersAdjusted" class="font-display font-bold text-2xl text-rose-400">0</span>
+                <span class="text-xs text-slate-400">points</span>
+              </div>
+              <p class="text-xs text-slate-400 mt-2">1.5× IQR boundary clipping</p>
+            </div>
+
+          </div>
+
+          <!-- Automated Cleaning Action Log Table -->
+          <div class="glass-card rounded-2xl p-5 shadow-xl">
+            <div class="flex items-center justify-between mb-3">
+              <div>
+                <h4 class="font-display font-semibold text-sm text-white flex items-center gap-2">
+                  <span>🛡️</span> Automated Cleaning Action Log
+                </h4>
+                <p class="text-xs text-slate-400">Verified diagnostic audits, deduplication, imputation, and outlier controls</p>
+              </div>
+              <span class="text-xs text-emerald-400 font-mono bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/50">Active Audit</span>
+            </div>
+
+            <div class="overflow-x-auto rounded-xl border border-slate-800/80 bg-slate-950/60">
+              <table class="w-full text-left text-xs">
+                <thead>
+                  <tr class="border-b border-slate-800 text-slate-400 bg-slate-900/60">
+                    <th class="py-2.5 px-4 font-semibold">Diagnostic Action</th>
+                    <th class="py-2.5 px-4 font-semibold">Audit Details & Strategy</th>
+                    <th class="py-2.5 px-4 font-semibold">Impact</th>
+                  </tr>
+                </thead>
+                <tbody id="cleanActionLogsTbody" class="divide-y divide-slate-800/60 text-slate-300">
+                  <tr>
+                    <td colspan="3" class="text-center py-6 text-slate-400">Upload a dataset to inspect automated cleaning logs.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Cleaned Dataset Preview & Direct Download -->
+          <div class="glass-card rounded-2xl p-5 shadow-xl">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
+              <div>
+                <h4 class="font-display font-semibold text-sm text-white flex items-center gap-2">
+                  <span>📊</span> Cleaned Dataset Preview
+                </h4>
+                <p class="text-xs text-slate-400">Live preview of sanitized and imputed dataset records</p>
+              </div>
+              <button id="downloadCleanCsvBtn" onclick="downloadCleanedCsv()" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs rounded-xl transition flex items-center gap-2 shadow-lg shadow-emerald-500/25">
+                <span>⬇️</span>
+                <span>Download Cleaned CSV</span>
+              </button>
+            </div>
+
+            <div id="cleanedDataPreviewTableContainer" class="overflow-x-auto rounded-xl border border-slate-800/80 bg-slate-950/80 p-1 text-xs">
+              <div class="text-center py-8 text-slate-400 font-sans">Cleaned data table will render here.</div>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- 3. MODALS                                                                 -->
+  <!-- ========================================================================= -->
+
+  <!-- Lightbox Modal for Chart Zoom -->
+  <div id="chartZoomModal" class="fixed inset-0 z-50 hidden bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-card rounded-2xl max-w-4xl w-full p-4 border-slate-700 shadow-2xl relative">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div>
+          <h3 id="modalChartTitle" class="font-display font-semibold text-base text-white">Chart Zoom Inspection</h3>
+          <p id="modalChartDesc" class="text-xs text-slate-400"></p>
+        </div>
+        <button onclick="closeZoomModal()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center transition">✕</button>
+      </div>
+      <div class="py-4 flex justify-center bg-slate-950/70 rounded-xl my-2">
+        <img id="modalChartImg" src="" alt="Zoomed Chart" class="max-h-[70vh] w-auto object-contain rounded-lg">
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button id="modalDownloadBtn" class="px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold text-xs rounded-xl transition flex items-center gap-1.5 shadow-md shadow-cyan-500/20">
+          <span>⬇️</span>
+          <span>Download High-Res PNG</span>
+        </button>
+        <button onclick="closeZoomModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium rounded-xl transition">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 4. JAVASCRIPT APPLICATION LOGIC                                           -->
+  <!-- ========================================================================= -->
+  <script>
+    // Application State
+    let currentFile = null;
+    let activeSessionId = null;
+    let lastAnalysisData = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setupDragAndDrop();
+    });
+
+    // Drag and Drop & File Selection
+    function setupDragAndDrop() {
+      const dropZone = document.getElementById('dropZone');
+      dropZone.addEventListener('click', (e) => {
+        if (!e.target.closest('button')) {
+          document.getElementById('csvFileInput').click();
+        }
+      });
+      ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          dropZone.classList.add('border-cyan-400', 'bg-slate-900/90');
+        }, false);
+      });
+      ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          dropZone.classList.remove('border-cyan-400', 'bg-slate-900/90');
+        }, false);
+      });
+      dropZone.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        if (files.length > 0) {
+          handleFile(files[0]);
+        }
+      });
+    }
+
+    function handleFileSelect(e) {
+      if (e.target.files.length > 0) {
+        handleFile(e.target.files[0]);
+      }
+    }
+
+    function handleFile(file) {
+      if (!file.name.toLowerCase().endsWith('.csv')) {
+        alert('Please upload a valid CSV file (.csv).');
+        return;
+      }
+      currentFile = file;
+      document.getElementById('uploadPrompt').classList.add('hidden');
+      document.getElementById('uploadedFileDetails').classList.remove('hidden');
+      document.getElementById('fileNameLabel').innerText = file.name;
+      document.getElementById('fileMetaLabel').innerText = `${(file.size / 1024).toFixed(1)} KB • CSV Ready for Dynamic Ingestion`;
+    }
+
+    function clearSelectedFile(e) {
+      e.stopPropagation();
+      currentFile = null;
+      document.getElementById('csvFileInput').value = '';
+      document.getElementById('uploadPrompt').classList.remove('hidden');
+      document.getElementById('uploadedFileDetails').classList.add('hidden');
+    }
+
+    function onPersonaChanged() {
+      const persona = document.querySelector('input[name="persona"]:checked').value;
+      if (lastAnalysisData) {
+        // If analysis already ran, user can re-run to see persona differences immediately
+        runAnalysis();
+      }
+    }
+
+    // Tab Switching (Only 2 tabs now: visual and clean)
+    function switchTab(tabId) {
+      const tabs = ['visual', 'clean'];
+      tabs.forEach(t => {
+        const btn = document.getElementById(`tab-btn-${t}`);
+        const content = document.getElementById(`tab-content-${t}`);
+        if (t === tabId) {
+          content.classList.remove('hidden');
+          btn.className = "tab-btn flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-500/20 to-indigo-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm";
+        } else {
+          content.classList.add('hidden');
+          btn.className = "tab-btn flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center justify-center gap-2 text-slate-400 hover:text-slate-200";
+        }
+      });
+
+      // If switching to clean tab, re-render preview table to guarantee visibility
+      if (tabId === 'clean' && lastAnalysisData && lastAnalysisData.cleaner_preview) {
+        renderTablePreview(lastAnalysisData.cleaner_preview.preview_cleaned_rows);
+      }
+    }
+
+    // Core Analysis Execution (Fast)
+    async function runAnalysis() {
+      if (!currentFile) {
+        alert('Please select or drop a CSV file to analyze.');
+        return;
+      }
+
+      const runBtn = document.getElementById('runAnalysisBtn');
+      const runBtnText = document.getElementById('runBtnText');
+      const runBtnIcon = document.getElementById('runBtnIcon');
+
+      // Loading State
+      runBtn.disabled = true;
+      runBtnText.innerText = 'PERCEIVING & ANALYZING...';
+      runBtnIcon.innerHTML = `<svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>`;
+
+      try {
+        const persona = document.querySelector('input[name="persona"]:checked').value;
+        const prompt = document.getElementById('customPromptInput').value.trim();
+
+        const formData = new FormData();
+        formData.append('file', currentFile);
+        formData.append('persona', persona);
+        if (prompt) formData.append('prompt', prompt);
+
+        const response = await fetch('/api/analyze', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          const errData = await response.json();
+          throw new Error(errData.detail || 'Analysis request failed.');
+        }
+
+        const data = await response.json();
+        lastAnalysisData = data;
+        activeSessionId = data.session_id;
+
+        // Render UI with dynamic results
+        renderDiagnosticResults(data, persona);
+        switchTab('visual');
+
+      } catch (err) {
+        console.error(err);
+        alert(`Analysis Error: ${err.message}`);
+      } finally {
+        runBtn.disabled = false;
+        runBtnText.innerText = 'RUN DYNAMIC GEMMA 4 ANALYSIS';
+        runBtnIcon.innerText = '🚀';
+      }
+    }
+
+    // Render Diagnostic Results into DOM
+    function renderDiagnosticResults(data, persona) {
+      // 1. KPI Strip
+      document.getElementById('kpiHealthScore').innerText = `${data.health.score}%`;
+      document.getElementById('kpiHealthBar').style.width = `${Math.min(100, Math.max(0, data.health.score))}%`;
+      
+      const ratingBadge = document.getElementById('kpiHealthRatingBadge');
+      ratingBadge.innerText = data.health.rating;
+      if (data.health.score >= 90) {
+        ratingBadge.className = "text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30";
+      } else if (data.health.score >= 70) {
+        ratingBadge.className = "text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30";
+      } else {
+        ratingBadge.className = "text-[10px] font-semibold px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/30";
+      }
+
+      document.getElementById('kpiRows').innerText = data.dimensions.total_rows.toLocaleString();
+      document.getElementById('kpiCols').innerText = `${data.dimensions.total_columns} columns • ${data.dimensions.memory_kb} KB`;
+      document.getElementById('kpiMissingCells').innerText = data.health.total_null_cells.toLocaleString();
+      document.getElementById('kpiDuplicates').innerText = `${data.health.duplicate_rows} duplicates (${data.health.duplicate_percentage}%)`;
+      document.getElementById('kpiOutliers').innerText = data.health.total_outliers_detected.toLocaleString();
+
+      // 2. Charts Gallery
+      document.getElementById('chartsEmptyState').classList.add('hidden');
+      document.getElementById('chartsGrid').classList.remove('hidden');
+
+      const c1 = data.charts.chart_1;
+      const c2 = data.charts.chart_2;
+      const c3 = data.charts.chart_3;
+      const c4 = data.charts.chart_4;
+
+      document.getElementById('chart1Img').src = c1.base64;
+      document.getElementById('chart1Desc').innerText = c1.title;
+      document.getElementById('chart2Img').src = c2.base64;
+      document.getElementById('chart2Desc').innerText = c2.title;
+      document.getElementById('chart3Img').src = c3.base64;
+      document.getElementById('chart3Desc').innerText = c3.title;
+      document.getElementById('chart4Img').src = c4.base64;
+      document.getElementById('chart4Desc').innerText = c4.title;
+
+      // 3. Gemma 4 Multimodal Intelligence Report
+      document.getElementById('aiReportContainer').classList.remove('hidden');
+      document.getElementById('chatStudioContainer').classList.remove('hidden');
+
+      const ai = data.ai_insights;
+      document.getElementById('aiModelUsedBadge').innerText = ai.model_used || 'Gemma 4 Multimodal';
+
+      // Persona Banner Update
+      const isExec = (persona || '').toLowerCase() === 'executive';
+      const pTitle = document.getElementById('personaBannerTitle');
+      const pDesc = document.getElementById('personaBannerDesc');
+      const pIcon = document.getElementById('personaBannerIcon');
+      const sHeading = document.getElementById('storySectionHeading');
+
+      if (isExec) {
+        pTitle.innerText = "Executive Leadership Briefing (ROI & Strategic Risk)";
+        pTitle.className = "font-display font-bold text-sm text-cyan-300";
+        pDesc.innerText = "Bottom-line profitability exposure, macro trajectory inflections, and strategic capital allocation";
+        pIcon.innerText = "👔";
+        sHeading.innerHTML = `<span>📖</span> Executive Strategic Narrative & ROI Impact Analysis`;
+      } else {
+        pTitle.innerText = "Data Science & Statistical Methodology Deep-Dive";
+        pTitle.className = "font-display font-bold text-sm text-indigo-300";
+        pDesc.innerText = "Mathematical distribution geometry, Central Limit Theorem mechanics, Tukey 1.5× IQR fences, and feature scaling";
+        pIcon.innerText = "🎓";
+        sHeading.innerHTML = `<span>📖</span> Statistical Distribution & Mathematical Proofs Narrative`;
+      }
+
+      // Markdown parsing for report cards
+      document.getElementById('executiveStoryContent').innerHTML = marked.parse(ai.executive_visual_story || '');
+      document.getElementById('visualAnomalyContent').innerHTML = marked.parse(ai.visual_anomaly_radar || '');
+      document.getElementById('crossChartContent').innerHTML = marked.parse(ai.cross_chart_correlations || '');
+
+      // Playbook cards
+      const playbookBox = document.getElementById('playbookContent');
+      playbookBox.innerHTML = '';
+      const playbookItems = Array.isArray(ai.actionable_decision_playbook) 
+        ? ai.actionable_decision_playbook 
+        : [ai.actionable_decision_playbook];
+
+      playbookItems.forEach((item, idx) => {
+        const div = document.createElement('div');
+        div.className = "p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 flex items-start gap-3";
+        div.innerHTML = `
+          <span class="w-6 h-6 rounded-lg bg-emerald-500/20 text-emerald-400 font-bold flex items-center justify-center flex-shrink-0 text-xs">${idx + 1}</span>
+          <div class="prose-dark text-xs leading-relaxed text-slate-200">${marked.parse(item)}</div>
+        `;
+        playbookBox.appendChild(div);
+      });
+
+      // 4. Populate Auto Clean Studio
+      const cleanMetrics = data.cleaner_preview.metrics;
+      document.getElementById('cleanHealthBefore').innerText = `${cleanMetrics.health_score_before}%`;
+      document.getElementById('cleanHealthAfter').innerText = `${cleanMetrics.health_score_after}%`;
+      document.getElementById('cleanImprovementBadge').innerText = `+${cleanMetrics.health_improvement}% Improvement`;
+      document.getElementById('cleanMissingFilled').innerText = cleanMetrics.missing_values_filled.toLocaleString();
+      document.getElementById('cleanOutliersAdjusted').innerText = cleanMetrics.outliers_adjusted.toLocaleString();
+
+      // Action Logs
+      const tbody = document.getElementById('cleanActionLogsTbody');
+      tbody.innerHTML = '';
+      if (data.cleaner_preview.action_logs && data.cleaner_preview.action_logs.length > 0) {
+        data.cleaner_preview.action_logs.forEach(log => {
+          const tr = document.createElement('tr');
+          tr.className = "hover:bg-slate-900/40";
+          tr.innerHTML = `
+            <td class="py-3 px-4 font-semibold text-cyan-400 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+              ${log.action}
+            </td>
+            <td class="py-3 px-4 text-slate-300">${log.description}</td>
+            <td class="py-3 px-4 font-mono text-emerald-400 whitespace-nowrap">${log.impact || 'Verified'}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      // Render Cleaned Data Preview Table
+      renderTablePreview(data.cleaner_preview.preview_cleaned_rows);
+    }
+
+    // Cleaned Data Preview Table Renderer
+    function renderTablePreview(rows) {
+      const container = document.getElementById('cleanedDataPreviewTableContainer');
+      if (!rows || rows.length === 0) {
+        container.innerHTML = '<div class="text-center py-6 text-slate-400">No records available. Upload and analyze a CSV first.</div>';
+        return;
+      }
+      const columns = Object.keys(rows[0]);
+      let html = '<div class="overflow-x-auto max-h-80"><table class="w-full text-left text-xs font-mono">';
+      html += '<thead><tr class="border-b border-slate-800 text-slate-400 bg-slate-900/80 sticky top-0">';
+      columns.forEach(col => {
+        html += `<th class="py-2.5 px-3 whitespace-nowrap font-semibold text-cyan-300">${col}</th>`;
+      });
+      html += '</tr></thead><tbody class="divide-y divide-slate-800/60">';
+      rows.forEach((r, idx) => {
+        html += `<tr class="${idx % 2 === 0 ? 'bg-slate-950/40' : 'bg-slate-900/20'} hover:bg-slate-800/40 transition">`;
+        columns.forEach(col => {
+          const val = r[col];
+          const displayVal = (val !== null && val !== undefined && val !== '') 
+            ? val 
+            : '<span class="text-slate-600 italic">null</span>';
+          html += `<td class="py-2 px-3 whitespace-nowrap text-slate-300">${displayVal}</td>`;
+        });
+        html += '</tr>';
+      });
+      html += '</tbody></table></div>';
+      html += `<div class="p-2 text-right text-[11px] text-slate-500 font-mono">Showing first ${rows.length} rows of cleaned dataset</div>`;
+      container.innerHTML = html;
+    }
+
+    // Chart Lightbox Zoom & Download
+    function zoomChart(chartKey) {
+      if (!lastAnalysisData) return;
+      const chartMap = {
+        'chart1': lastAnalysisData.charts.chart_1,
+        'chart2': lastAnalysisData.charts.chart_2,
+        'chart3': lastAnalysisData.charts.chart_3,
+        'chart4': lastAnalysisData.charts.chart_4,
+      };
+      const chart = chartMap[chartKey];
+      if (!chart) return;
+
+      document.getElementById('modalChartTitle').innerText = chart.title;
+      document.getElementById('modalChartDesc').innerText = chart.description;
+      document.getElementById('modalChartImg').src = chart.base64;
+      
+      const dlBtn = document.getElementById('modalDownloadBtn');
+      dlBtn.onclick = () => downloadChart(chartKey, `${chartKey}_highres.png`);
+
+      document.getElementById('chartZoomModal').classList.remove('hidden');
+    }
+
+    function closeZoomModal() {
+      document.getElementById('chartZoomModal').classList.add('hidden');
+    }
+
+    function downloadChart(chartKey, filename) {
+      if (!lastAnalysisData) return;
+      const chartMap = {
+        'chart1': lastAnalysisData.charts.chart_1,
+        'chart2': lastAnalysisData.charts.chart_2,
+        'chart3': lastAnalysisData.charts.chart_3,
+        'chart4': lastAnalysisData.charts.chart_4,
+      };
+      const chart = chartMap[chartKey];
+      if (!chart) return;
+
+      const link = document.createElement('a');
+      link.href = chart.base64;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    // Download Cleaned CSV
+    function downloadCleanedCsv() {
+      if (!activeSessionId) {
+        alert('Please run an analysis on your CSV file first.');
+        return;
+      }
+      window.location.href = `/api/clean/download/${activeSessionId}`;
+    }
+
+    // Fast Interactive Chat Logic (<2s response)
+    async function sendChatMessage() {
+      const input = document.getElementById('chatQuestionInput');
+      const question = input.value.trim();
+      if (!question) return;
+
+      const chatBox = document.getElementById('chatMessages');
+
+      // Append User message
+      const userDiv = document.createElement('div');
+      userDiv.className = "flex justify-end";
+      userDiv.innerHTML = `
+        <div class="bg-cyan-500/20 text-cyan-200 border border-cyan-500/30 rounded-xl px-3 py-2 max-w-[85%] font-medium">
+          ${question}
+        </div>
+      `;
+      chatBox.appendChild(userDiv);
+      input.value = '';
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      // Fast Loading indicator
+      const loadingDiv = document.createElement('div');
+      loadingDiv.className = "flex justify-start";
+      loadingDiv.innerHTML = `
+        <div class="bg-slate-900 text-slate-400 border border-slate-800 rounded-xl px-3 py-2 flex items-center gap-2">
+          <svg class="animate-spin h-3.5 w-3.5 text-cyan-400" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
+          <span class="text-[11px] font-mono">Inspecting visual charts...</span>
+        </div>
+      `;
+      chatBox.appendChild(loadingDiv);
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      try {
+        const persona = document.querySelector('input[name="persona"]:checked').value;
+        const resp = await fetch('/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            session_id: activeSessionId,
+            question: question,
+            persona: persona
+          })
+        });
+
+        const resData = await resp.json();
+        chatBox.removeChild(loadingDiv);
+
+        // Assistant reply
+        const botDiv = document.createElement('div');
+        botDiv.className = "flex justify-start";
+        botDiv.innerHTML = `
+          <div class="bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2.5 max-w-[90%] text-slate-200 prose-dark">
+            ${marked.parse(resData.answer || 'No response returned.')}
+            <div class="text-[9px] font-mono text-slate-500 mt-1">Grounding: ${resData.model_used || 'Gemma 4 Multimodal'}</div>
+          </div>
+        `;
+        chatBox.appendChild(botDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+      } catch (err) {
+        chatBox.removeChild(loadingDiv);
+        const errDiv = document.createElement('div');
+        errDiv.className = "text-rose-400 text-center py-1 text-xs";
+        errDiv.innerText = `Chat Error: ${err.message}`;
+        chatBox.appendChild(errDiv);
+      }
+    }
+
+    function askPresetQuestion(q) {
+      document.getElementById('chatQuestionInput').value = q;
+      sendChatMessage();
+    }
+  </script>
+</body>
+</html>
