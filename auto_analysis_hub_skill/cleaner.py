@@ -63,7 +63,7 @@ class AutoDataCleaner:
 
         # 2. String Cleaning (Strip whitespace & standardize null representations)
         cleaned_str_cols = []
-        for col in df.select_dtypes(include=["object"]).columns:
+        for col in df.select_dtypes(include=["object", "string"]).columns:
             if df[col].dropna().apply(lambda x: isinstance(x, str)).any():
                 df[col] = df[col].astype(str).str.strip().replace({"nan": np.nan, "None": np.nan, "": np.nan})
                 cleaned_str_cols.append(str(col))
@@ -82,7 +82,7 @@ class AutoDataCleaner:
 
         # 3. Numeric Missing Values Imputation
         num_missing_fixed = 0
-        num_cols = df.select_dtypes(include=[np.number]).columns.tolist()
+        num_cols = [c for c in df.columns if pd.api.types.is_numeric_dtype(df[c])]
         num_imputations = {}
 
         for col in num_cols:

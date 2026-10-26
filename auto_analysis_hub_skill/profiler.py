@@ -82,11 +82,11 @@ class DataProfiler:
 
         for col in df.columns:
             dtype_str = str(df[col].dtype).lower()
-            if "datetime" in dtype_str:
+            if "datetime" in dtype_str or pd.api.types.is_datetime64_any_dtype(df[col]):
                 col_types["datetime"].append(col)
-            elif "bool" in dtype_str:
+            elif "bool" in dtype_str or pd.api.types.is_bool_dtype(df[col]):
                 col_types["boolean"].append(col)
-            elif np.issubdtype(df[col].dtype, np.number):
+            elif pd.api.types.is_numeric_dtype(df[col]):
                 # Ensure it's not all NaNs
                 col_types["numerical"].append(col)
             else:

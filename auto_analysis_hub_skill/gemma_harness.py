@@ -317,7 +317,7 @@ Instructions:
             # Check if user asks about correlation between 2 columns
             if len(matched_cols) >= 2 and any(k in q_lower for k in ["correlation", "relationship", "versus", "vs", "related", "between"]):
                 c1, c2 = matched_cols[0], matched_cols[1]
-                if np.issubdtype(df[c1].dtype, np.number) and np.issubdtype(df[c2].dtype, np.number):
+                if pd.api.types.is_numeric_dtype(df[c1]) and pd.api.types.is_numeric_dtype(df[c2]):
                     valid_df = df[[c1, c2]].dropna()
                     r_val = float(valid_df[c1].corr(valid_df[c2])) if len(valid_df) > 1 else 0.0
                     r2_val = r_val ** 2
@@ -454,7 +454,7 @@ Instructions:
         series = df[col].dropna()
 
         # If column is numerical
-        if np.issubdtype(df[col].dtype, np.number):
+        if pd.api.types.is_numeric_dtype(df[col]):
             if len(series) == 0:
                 return f"Column **`{col}`** contains only missing/null values across all {len(df):,} rows."
 
@@ -632,7 +632,7 @@ Instructions:
                     primary_col = cand
 
         if not primary_col:
-            num_cols = [c for c in df.columns if np.issubdtype(df[c].dtype, np.number) and df[c].dropna().nunique() > 1]
+            num_cols = [c for c in df.columns if pd.api.types.is_numeric_dtype(df[c]) and df[c].dropna().nunique() > 1]
             if not num_cols:
                 return "No continuous numerical features were detected in the dataset to construct Chart 4 Outlier Dispersion."
             primary_col = num_cols[0]
@@ -705,7 +705,7 @@ Instructions:
                     target_col = cand
 
         if not target_col:
-            num_cols = [c for c in df.columns if np.issubdtype(df[c].dtype, np.number) and df[c].dropna().nunique() > 1]
+            num_cols = [c for c in df.columns if pd.api.types.is_numeric_dtype(df[c]) and df[c].dropna().nunique() > 1]
             if not num_cols:
                 return "No sequential numerical features available to trace Chart 1 Progression."
             target_col = num_cols[0]
@@ -777,7 +777,7 @@ Instructions:
             # Filter non-numeric columns that are not date-like and have cardinality <= 50
             cat_candidates = []
             for c in df.columns:
-                if not np.issubdtype(df[c].dtype, np.number):
+                if not pd.api.types.is_numeric_dtype(df[c]):
                     sample = df[c].dropna().head(5)
                     is_date = False
                     if len(sample) > 0 and isinstance(sample.iloc[0], str):
@@ -793,7 +793,7 @@ Instructions:
             if cat_candidates:
                 target_col = cat_candidates[0]
             else:
-                cat_cols = [c for c in df.columns if not np.issubdtype(df[c].dtype, np.number) and df[c].dropna().nunique() > 1]
+                cat_cols = [c for c in df.columns if not pd.api.types.is_numeric_dtype(df[c]) and df[c].dropna().nunique() > 1]
                 if not cat_cols:
                     return "No discrete categorical features detected to construct Chart 2 Category Breakdown."
                 target_col = cat_cols[0]
@@ -852,7 +852,7 @@ Instructions:
         is_exec: bool
     ) -> str:
         """Analyze Chart 3 multivariate Pearson correlation heatmap."""
-        num_cols = [c for c in df.columns if np.issubdtype(df[c].dtype, np.number) and df[c].dropna().nunique() > 1]
+        num_cols = [c for c in df.columns if pd.api.types.is_numeric_dtype(df[c]) and df[c].dropna().nunique() > 1]
         if len(num_cols) < 2:
             return "At least 2 numerical features are required to compute the Chart 3 Correlation Heatmap."
 
@@ -921,8 +921,8 @@ Instructions:
         dup_rows = int(df.duplicated().sum())
         dup_pct = round((dup_rows / max(1, rows)) * 100, 2)
 
-        num_cols = [c for c in df.columns if np.issubdtype(df[c].dtype, np.number)]
-        cat_cols = [c for c in df.columns if not np.issubdtype(df[c].dtype, np.number)]
+        num_cols = [c for c in df.columns if pd.api.types.is_numeric_dtype(df[c])]
+        cat_cols = [c for c in df.columns if not pd.api.types.is_numeric_dtype(df[c])]
 
         col_list_num = ", ".join(f"`{c}`" for c in num_cols[:5]) + (f" (+{len(num_cols)-5} more)" if len(num_cols) > 5 else "")
         col_list_cat = ", ".join(f"`{c}`" for c in cat_cols[:5]) + (f" (+{len(cat_cols)-5} more)" if len(cat_cols) > 5 else "")
@@ -949,8 +949,8 @@ Instructions:
         is_exec: bool
     ) -> str:
         """Synthesize 3 concrete, data-grounded strategic recommendations."""
-        num_cols = [c for c in df.columns if np.issubdtype(df[c].dtype, np.number) and df[c].dropna().nunique() > 1]
-        cat_cols = [c for c in df.columns if not np.issubdtype(df[c].dtype, np.number) and df[c].dropna().nunique() > 1]
+        num_cols = [c for c in df.columns if pd.api.types.is_numeric_dtype(df[c]) and df[c].dropna().nunique() > 1]
+        cat_cols = [c for c in df.columns if not pd.api.types.is_numeric_dtype(df[c]) and df[c].dropna().nunique() > 1]
 
         primary_num = num_cols[0] if num_cols else "Volume"
         primary_cat = cat_cols[0] if cat_cols else "Segment"
@@ -987,8 +987,8 @@ Instructions:
     ) -> str:
         """Grounded fallback answering the prompt with actual dataset facts."""
         rows, cols = df.shape
-        num_cols = [c for c in df.columns if np.issubdtype(df[c].dtype, np.number) and df[c].dropna().nunique() > 1]
-        cat_cols = [c for c in df.columns if not np.issubdtype(df[c].dtype, np.number) and df[c].dropna().nunique() > 1]
+        num_cols = [c for c in df.columns if pd.api.types.is_numeric_dtype(df[c]) and df[c].dropna().nunique() > 1]
+        cat_cols = [c for c in df.columns if not pd.api.types.is_numeric_dtype(df[c]) and df[c].dropna().nunique() > 1]
 
         highlights = []
         if num_cols:
