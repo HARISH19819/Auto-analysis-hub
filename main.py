@@ -208,18 +208,30 @@ async def analyze_dataset_endpoint(
 @app.post("/api/chat")
 async def chat_endpoint(request: ChatRequest):
     """High-speed 'Ask the Charts' interactive Q&A endpoint with multimodal grounding."""
-    session = SESSION_CACHE.get(request.session_id or "") if request.session_id else None
+    session = None
+    if request.session_id and request.session_id in SESSION_CACHE:
+        session = SESSION_CACHE[request.session_id]
+    elif len(SESSION_CACHE) > 0:
+        session = list(SESSION_CACHE.values())[-1]
 
-    chart_bytes = session["charts_data"]["all_bytes"] if session else []
-    profile_text = session["profile_data"]["text_summary"] if session else "Dataset general summary."
+    df = session.get("df") if session else None
+    profile_data = session.get("profile_data") if session else None
+    charts_data = session.get("charts_data") if session else None
+    chart_bytes = charts_data.get("all_bytes", []) if charts_data else []
+    profile_text = profile_data.get("text_summary", "") if profile_data else ""
     backend_api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
+
+    persona = request.persona or (session.get("persona") if session else "executive")
 
     harness = GemmaMultimodalHarness(api_key=backend_api_key)
     chat_result = harness.chat_with_charts(
         question=request.question,
         chart_images_bytes=chart_bytes,
         profile_text=profile_text,
-        persona=request.persona or (session["persona"] if session else "executive")
+        persona=persona,
+        df=df,
+        profile_data=profile_data,
+        charts_data=charts_data
     )
 
     return chat_result

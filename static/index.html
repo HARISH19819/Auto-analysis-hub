@@ -121,6 +121,28 @@
       font-size: 0.875rem;
       font-family: 'JetBrains Mono', monospace;
     }
+    .prose-dark table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.75rem 0;
+      font-size: 0.75rem;
+    }
+    .prose-dark th {
+      background: rgba(30, 41, 59, 0.9);
+      color: #38bdf8;
+      border: 1px solid #334155;
+      padding: 0.4rem 0.6rem;
+      text-align: left;
+      font-weight: 600;
+    }
+    .prose-dark td {
+      border: 1px solid #1e293b;
+      padding: 0.35rem 0.6rem;
+      color: #e2e8f0;
+    }
+    .prose-dark tr:nth-child(even) {
+      background: rgba(15, 23, 42, 0.4);
+    }
   </style>
 </head>
 
@@ -533,20 +555,29 @@
 
             <!-- Suggested Question Pills -->
             <div class="flex flex-wrap gap-1.5 mb-3">
+              <button onclick="askPresetQuestion('What are the key statistical metrics and averages?')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-800/80 hover:bg-cyan-950/60 text-slate-300 hover:text-cyan-300 border border-slate-700 hover:border-cyan-500/50 transition">
+                📊 Key Metrics & Averages?
+              </button>
               <button onclick="askPresetQuestion('Explain the outlier points in Chart 4')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-800/80 hover:bg-cyan-950/60 text-slate-300 hover:text-cyan-300 border border-slate-700 hover:border-cyan-500/50 transition">
-                Outliers in Chart 4?
+                🎯 Outliers in Chart 4?
               </button>
               <button onclick="askPresetQuestion('What caused the inflection drop in Chart 1?')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-800/80 hover:bg-cyan-950/60 text-slate-300 hover:text-cyan-300 border border-slate-700 hover:border-cyan-500/50 transition">
-                Inflection in Chart 1?
+                📈 Trend & Drops in Chart 1?
+              </button>
+              <button onclick="askPresetQuestion('Which category dominates Chart 2?')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-800/80 hover:bg-cyan-950/60 text-slate-300 hover:text-cyan-300 border border-slate-700 hover:border-cyan-500/50 transition">
+                🏷️ Categories in Chart 2?
               </button>
               <button onclick="askPresetQuestion('Which features have strong correlation in Chart 3?')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-800/80 hover:bg-cyan-950/60 text-slate-300 hover:text-cyan-300 border border-slate-700 hover:border-cyan-500/50 transition">
-                Correlations in Chart 3?
+                🔗 Correlations in Chart 3?
+              </button>
+              <button onclick="askPresetQuestion('What is the actionable decision playbook?')" class="text-[11px] px-2.5 py-1 rounded-full bg-slate-800/80 hover:bg-cyan-950/60 text-slate-300 hover:text-cyan-300 border border-slate-700 hover:border-cyan-500/50 transition">
+                📋 Decision Playbook?
               </button>
             </div>
 
             <!-- Messages Log -->
-            <div id="chatMessages" class="max-h-64 overflow-y-auto space-y-3 mb-3 p-3 bg-slate-950/70 rounded-xl border border-slate-800/80 text-xs">
-              <div class="text-slate-400 text-center py-2">Ask any question about the generated charts and dataset.</div>
+            <div id="chatMessages" class="max-h-80 overflow-y-auto space-y-3 mb-3 p-3 bg-slate-950/70 rounded-xl border border-slate-800/80 text-xs">
+              <div class="text-slate-400 text-center py-2">Ask any question about specific columns, metrics, charts, or decisions.</div>
             </div>
 
             <!-- Chat Input Box -->
