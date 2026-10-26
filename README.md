@@ -160,16 +160,28 @@ Access the application at `http://localhost:8000`.
 
 ---
 
-## 6. Cloud Platform Deployment (GitHub Actions, Railway, Render, DigitalOcean)
+## 6. Cloud Deployment on Render (1-Click & Free Tier)
 
-### DigitalOcean App Platform / Render / Railway:
-1. Push your repository to GitHub.
-2. Create a new Web Service pointing to your GitHub repo.
-3. Build Command: `pip install -r requirements.txt`
-4. Start Command: `uvicorn main:app --host 0.0.0.0 --port 8000`
-5. Set Environment Variable in the dashboard:
-   - `GEMINI_API_KEY` = `your_gemini_api_key`
-   - `DEFAULT_MODEL` = `gemini-2.5-flash`
+Auto-analysis-hub includes a native [render.yaml](render.yaml) Blueprint for automated 1-click deployment on [Render](https://render.com):
+
+### 1-Click Setup via Render Blueprint:
+1. Log in to [dashboard.render.com](https://dashboard.render.com).
+2. Click **New +** -> **Blueprint**.
+3. Connect your GitHub repository: `https://github.com/HARISH19819/Auto-analysis-hub`.
+4. Render will automatically detect `render.yaml` and configure the Docker Web Service.
+5. In Environment Variables:
+   - `GEMINI_API_KEY`: *(Optional)* Enter your Google Gemini API Key from Google AI Studio.
+   - `DEFAULT_MODEL`: `gemini-2.5-flash`
+6. Click **Apply**. Render will build the container and provide your live public URL with automatic HTTPS (e.g., `https://auto-analysis-hub.onrender.com`).
+
+### Manual Web Service Setup (Alternative):
+1. In Render, select **New +** -> **Web Service**.
+2. Select your repository `HARISH19819/Auto-analysis-hub`.
+3. Choose **Docker** as the Runtime.
+4. Set Instance Type to **Free**.
+5. Add Environment Variable:
+   - Key: `GEMINI_API_KEY`, Value: *(your key)*
+6. Click **Deploy Web Service**. Render will build and expose the app.
 
 ---
 
