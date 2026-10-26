@@ -93,8 +93,8 @@ auto_analysis_hub/
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/auto-analysis-hub.git
-   cd auto-analysis-hub
+   git clone https://github.com/HARISH19819/Auto-analysis-hub.git
+   cd Auto-analysis-hub
    ```
 
 2. **Create and activate a virtual environment:**
